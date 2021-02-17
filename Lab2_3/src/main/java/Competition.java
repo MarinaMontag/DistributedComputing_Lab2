@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.RecursiveTask;
 
 public class Competition extends RecursiveTask<Member>{
@@ -14,11 +16,14 @@ public class Competition extends RecursiveTask<Member>{
     protected Member compute() {
         int len=end-start;
         if(len>THRESHOLD){
-            int offset=end/2;
-            Competition subtask1=new Competition(members,start,offset);
-            subtask1.fork();
-            Competition subtask2=new Competition(members,offset+1,end);
-            return getWinner(subtask2.compute(),subtask1.join());
+            List<Competition> subtasks = new ArrayList<Competition>();
+            subtasks.addAll(createSubtasks());
+            for(Competition subtask : subtasks){
+                subtask.fork();
+            }
+            Member member1=subtasks.get(0).join();
+            Member member2=subtasks.get(1).join();
+            return getWinner(member1,member2);
         }
         else{
             return getWinner(members[start],members[end]);
@@ -34,6 +39,16 @@ public class Competition extends RecursiveTask<Member>{
             printResult(m2,m1);
             return m2;
         }
+    }
+
+    private List<Competition> createSubtasks() {
+        List<Competition> subtasks = new ArrayList<Competition>();
+        int offset=end/2;
+        Competition subtask1=new Competition(members,start,offset);
+        Competition subtask2=new Competition(members,offset+1,end);
+        subtasks.add(subtask1);
+        subtasks.add(subtask2);
+        return subtasks;
     }
 
     private void printResult(Member m1,Member m2){
