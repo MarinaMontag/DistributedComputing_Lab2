@@ -1,6 +1,6 @@
 public class Area {
-    private int number;
-    private boolean winnie;
+    private final int number;
+    private final boolean winnie;
 
     Area(int number, boolean winnie){
         this.number=number;
