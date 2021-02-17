@@ -1,7 +1,7 @@
 public class BeeGroup extends Thread {
-    private Forest forest;
-    private Hive home;
-    private int number;
+    private final Forest forest;
+    private final Hive home;
+    private final int number;
     private boolean interrupted;
     private static boolean found;
     BeeGroup(int number, Forest forest, Hive home) {
@@ -19,8 +19,7 @@ public class BeeGroup extends Thread {
     @Override
     public void run() {
         while (!interrupted) {
-            Area area = null;
-            area = forest.getArea();
+           Area area = forest.getArea();
             if (area != null) {
                 synchronized (forest) {
                     if (!found) {
@@ -36,7 +35,7 @@ public class BeeGroup extends Thread {
             }
             home.goBack(this);
             try {
-                Thread.sleep(3000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
