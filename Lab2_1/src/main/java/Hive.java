@@ -3,10 +3,10 @@ import java.util.Queue;
 
 public class Hive implements Runnable {
     private final int GROUPS_AMOUNT = 5;
-    private Queue<BeeGroup> in;
-    private Forest forest;
+    private final Queue<BeeGroup> in;
+    private final Forest forest;
     private Boolean found;
-    private Thread thread;
+    private final Thread thread;
 
     Hive(Forest forest) {
         found = false;
@@ -14,10 +14,6 @@ public class Hive implements Runnable {
         in = new ArrayDeque<>();
         thread = new Thread(this);
         thread.start();
-    }
-
-    public Boolean getFound() {
-        return found;
     }
 
     private void startBees() {
@@ -35,7 +31,7 @@ public class Hive implements Runnable {
         startBees();
         while (!thread.isInterrupted()) {
             while (in.size() < GROUPS_AMOUNT)
-                sleep(5);
+                sleep();
             synchronized (forest) {
                 if (found) {
                     for (BeeGroup beeG : in) {
@@ -43,7 +39,7 @@ public class Hive implements Runnable {
                     }
                     thread.interrupt();
                 } else {
-                    for (BeeGroup beeG : in) {
+                    for (int i=0;i<in.size();i++) {
                         in.poll();
                     }
                 }
@@ -51,9 +47,9 @@ public class Hive implements Runnable {
         }
     }
 
-    private void sleep(int time) {
+    private void sleep() {
         try {
-            thread.sleep(time);
+            Thread.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -63,9 +59,5 @@ public class Hive implements Runnable {
         synchronized (in) {
             in.add(beeG);
         }
-    }
-
-    public Queue<BeeGroup> getIn() {
-        return in;
     }
 }
