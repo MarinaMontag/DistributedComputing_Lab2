@@ -1,8 +1,8 @@
 import java.util.Random;
 
 public class Member {
-    private String temple;
-    private int number;
+    private final String temple;
+    private final int number;
     private final Integer energy;
     Member(int number){
         this.number=number;

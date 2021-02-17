@@ -3,10 +3,10 @@ import java.util.List;
 import java.util.concurrent.RecursiveTask;
 
 public class Competition extends RecursiveTask<Member>{
-    private Member[] members;
-    private int start;
-    private int end;
-    private static int THRESHOLD = 1;
+    private final Member[] members;
+    private final int start;
+    private final int end;
+    private static final int THRESHOLD = 1;
     Competition(Member[]members, int start, int end){
         this.start=start;
         this.end=end-1;
@@ -16,8 +16,7 @@ public class Competition extends RecursiveTask<Member>{
     protected Member compute() {
         int len=end-start;
         if(len>THRESHOLD){
-            List<Competition> subtasks = new ArrayList<Competition>();
-            subtasks.addAll(createSubtasks());
+            List<Competition> subtasks = new ArrayList<>(createSubtasks());
             for(Competition subtask : subtasks){
                 subtask.fork();
             }
@@ -42,7 +41,7 @@ public class Competition extends RecursiveTask<Member>{
     }
 
     private List<Competition> createSubtasks() {
-        List<Competition> subtasks = new ArrayList<Competition>();
+        List<Competition> subtasks = new ArrayList<>();
         int offset=end/2;
         Competition subtask1=new Competition(members,start,offset);
         Competition subtask2=new Competition(members,offset+1,end);
