@@ -19,14 +19,4 @@ public class Forest{
     public synchronized Area getArea() {
         return areas.poll();
     }
-
-    public boolean areAreasEmpty(){
-        synchronized (areas) {
-            return areas.isEmpty();
-        }
-    }
-
-    public Queue<Area> getAreas(){
-        return areas;
-    }
 }
